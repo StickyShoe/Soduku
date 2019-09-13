@@ -22,22 +22,39 @@ def main():
     print(mainSoduko)
 
     # beggining of the generate possibilities method
-    # with an extra smidge removing naked pairs
+    # with an extra smidge removing naked singles
 
+    centrePoints = [(1,1),(1,4),(1,7),(4,1),(4,4),(4,7),(7,1),(7,4),(7,7)]
+    centreList = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,0),(0,1),(1,-1),(1,0),(1,1)]
     
     for cell in emptyPlaces:
 
         stagingSet = set()
         xValue, yValue = [cell[0],cell[1]]
+        centre = 0
+
+        i = 0
+        while centre == 0:
+        # for point in centrePoints:  
+            point = centrePoints[i]
+            a = (int(xValue) - point[0])
+            b = (int(yValue) - point[1])
+            distance = ((a * a) + (b * b)) ** (0.5)
+            if distance <= (2 ** (0.5)):
+                centre = point
+            i += 1
 
         for complement in range(0,9):
 
             rowCheck = xValue + str(complement)
             colCheck = str(complement) + yValue
+            blockCheck = str(centre[0] + centreList[complement][0]) + str(centre[1] + centreList[complement][1])
             if rowCheck in filledCells:
                 stagingSet = stagingSet.union(mainSoduko[rowCheck])
             if colCheck in filledCells:
                 stagingSet = stagingSet.union(mainSoduko[colCheck])
+            if blockCheck in filledCells:
+                stagingSet = stagingSet.union(mainSoduko[blockCheck])
 
             if cell == "04":
                 print(rowCheck,colCheck,stagingSet)
