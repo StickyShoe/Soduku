@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 import sys
 
+mainSoduko = {}
+emptyPlaces = []
+centrePoints = [(1,1),(1,4),(1,7),(4,1),(4,4),(4,7),(7,1),(7,4),(7,7)]
+centreList = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,0),(0,1),(1,-1),(1,0),(1,1)]
+filledCells = []
+
 def main():
-    mainSoduko = {}
-    emptyPlaces = []
-    filledCells = []
     colIndex = 0
     rowIndex = 0 
     inputLine = list(input().strip())
-    print(inputLine)
+
     for rowIndex in range(0,9):
         for colIndex in range(0,9):
             num = inputLine[rowIndex *9 + colIndex]
@@ -19,13 +22,11 @@ def main():
             else:
                 mainSoduko[index] = {int(num)}
                 filledCells.append(index)
-    print(mainSoduko)
 
     # beggining of the generate possibilities method
     # with an extra smidge removing naked singles
 
-    centrePoints = [(1,1),(1,4),(1,7),(4,1),(4,4),(4,7),(7,1),(7,4),(7,7)]
-    centreList = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,0),(0,1),(1,-1),(1,0),(1,1)]
+    removedValues=[];
     
     for cell in emptyPlaces:
 
@@ -56,26 +57,27 @@ def main():
             if blockCheck in filledCells:
                 stagingSet = stagingSet.union(mainSoduko[blockCheck])
 
-            if cell == "04":
-                print(rowCheck,colCheck,stagingSet)
-        
         insertSet = {1,2,3,4,5,6,7,8,9} - stagingSet
 
         if len(insertSet) == 1:
-            emptyPlaces.remove(cell)
+            removedValues.append(cell)
             filledCells.append(cell)
-
+            # removeSinglePossibility(cell,insertSet)
         mainSoduko[cell] = insertSet
+    for values in removedValues:
+        emptyPlaces.remove(values)
 
-    
-    
-    print(mainSoduko)
+    # removeNakedSingles()
+
     print(emptyPlaces)
-# def input():
+    print(mainSoduko)
+    print(output())
 
-# def generatePossibilities():
-
-# def 
+def output():
+    for x in range(0,9):
+        for y in range(0,9):
+            print(mainSoduko[str(x)+str(y)].pop()," ",end="")
+        print()
 
 
 if __name__ == "__main__":
