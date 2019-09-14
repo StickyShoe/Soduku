@@ -62,7 +62,7 @@ def main():
         if len(insertSet) == 1:
             removedValues.append(cell)
             filledCells.append(cell)
-            # removeSinglePossibility(cell,insertSet)
+            removeSinglePossibility(cell,insertSet)
         mainSoduko[cell] = insertSet
     for values in removedValues:
         emptyPlaces.remove(values)
@@ -73,6 +73,36 @@ def main():
     print(mainSoduko)
     print(output())
 
+
+
+def removeSinglePossibility(initialPosition,removalValue):
+    
+    centrePoints = [(1,1),(1,4),(1,7),(4,1),(4,4),(4,7),(7,1),(7,4),(7,7)]
+    centreList = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,0),(0,1),(1,-1),(1,0),(1,1)]
+    xValue, yValue = [initialPosition[0],initialPosition[1]]
+    centre = 0
+    i = 0
+    while centre == 0: 
+        point = centrePoints[i]
+        a = (int(xValue) - point[0])
+        b = (int(yValue) - point[1])
+        distance = ((a * a) + (b * b)) ** (0.5)
+        if distance <= (2 ** (0.5)):
+            centre = point
+        i += 1
+    
+    for complement in range(0,9):
+        rowCheck = xValue + str(complement)
+        colCheck = str(complement) + yValue
+        blockCheck = str(centre[0] + centreList[complement][0]) + str(centre[1] + centreList[complement][1])
+        if rowCheck != initialPosition and rowCheck in emptyPlaces:
+            mainSoduko[rowCheck] = mainSoduko[rowCheck] - removalValue
+        if colCheck != initialPosition and colCheck in emptyPlaces:
+            mainSoduko[colCheck] = mainSoduko[colCheck] - removalValue
+        if blockCheck != initialPosition and blockCheck in emptyPlaces:
+            mainSoduko[blockCheck] = mainSoduko[blockCheck] - removalValue
+
+
 def output():
     for x in range(0,9):
         for y in range(0,9):
@@ -82,3 +112,4 @@ def output():
 
 if __name__ == "__main__":
     main()
+    print(emptyPlaces)
