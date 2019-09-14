@@ -62,17 +62,27 @@ def main():
         if len(insertSet) == 1:
             removedValues.append(cell)
             filledCells.append(cell)
-            removeSinglePossibility(cell,insertSet)
+            # removeSinglePossibility(cell,insertSet)
         mainSoduko[cell] = insertSet
     for values in removedValues:
         emptyPlaces.remove(values)
 
-    # removeNakedSingles()
+    removeNakedSingles()
 
     print(emptyPlaces)
     print(mainSoduko)
     print(output())
 
+
+def removeNakedSingles():
+    removedValues = []
+    for cell in emptyPlaces:
+        if len(mainSoduko[cell]) == 1:
+            removedValues.append(cell)
+            filledCells.append(cell)
+            removeSinglePossibility(cell,mainSoduko[cell])
+    for values in removedValues:
+        emptyPlaces.remove(values)
 
 
 def removeSinglePossibility(initialPosition,removalValue):
