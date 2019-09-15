@@ -25,7 +25,7 @@ def main():
 
     # beggining of the generate possibilities method
     # with an extra smidge removing naked singles
-
+    print(emptyPlaces)
     removedValues=[]
     for cell in emptyPlaces:
 
@@ -50,12 +50,13 @@ def main():
         if len(insertSet) == 1:
             removedValues.append(cell)
             filledCells.append(cell)
-            removeSinglePossibility(cell,insertSet)
         mainSoduko[cell] = insertSet
     for values in removedValues:
-        print(values,emptyPlaces)
         if values in emptyPlaces:
-            emptyPlaces.remove(values)
+            removeSinglePossibility(values,mainSoduko[values])
+        # print(values,emptyPlaces)
+        # if values in emptyPlaces:
+        #     emptyPlaces.remove(values)
 
     # removeNakedSingles()
     print(emptyPlaces)
@@ -63,15 +64,15 @@ def main():
     print(output())
 
 
-def removeNakedSingles():
-    removedValues = []
-    for cell in emptyPlaces:
-        if len(mainSoduko[cell]) == 1:
-            removedValues.append(cell)
-            filledCells.append(cell)
-            removeSinglePossibility(cell,mainSoduko[cell])
-    for values in removedValues:
-        emptyPlaces.remove(values)
+# def removeNakedSingles():
+#     removedValues = []
+#     for cell in emptyPlaces:
+#         if len(mainSoduko[cell]) == 1:
+#             removedValues.append(cell)
+#             filledCells.append(cell)
+#             removeSinglePossibility(cell,mainSoduko[cell])
+#     for values in removedValues:
+#         emptyPlaces.remove(values)
 
 
 # def hiddenSingleremoval():
@@ -109,8 +110,9 @@ def removeNakedSingles():
     #     emptyPlaces.remove(values)
 
 def removeSinglePossibility(initialPosition,removalValue):
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-
+    # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+    print(initialPosition,emptyPlaces)
+    emptyPlaces.remove(initialPosition)
     xValue, yValue = [initialPosition[0],initialPosition[1]]
     centre= getCenter(initialPosition)
     removedList = set()
@@ -122,24 +124,27 @@ def removeSinglePossibility(initialPosition,removalValue):
         if rowCheck != initialPosition and rowCheck in emptyPlaces:
             mainSoduko[rowCheck] = mainSoduko[rowCheck] - removalValue
             if len(mainSoduko[rowCheck]) == 1:
-                removedList = removedList.union({rowCheck})
-                emptyPlaces.remove(rowCheck)
+                removedList = removedList.union({rowCheck}) 
+                # emptyPlaces.remove(rowCheck)
         if colCheck != initialPosition and colCheck in emptyPlaces:
             mainSoduko[colCheck] = mainSoduko[colCheck] - removalValue
             if len(mainSoduko[colCheck]) == 1:
                 removedList = removedList.union({colCheck})
-                emptyPlaces.remove(colCheck)
+                # emptyPlaces.remove(colCheck)
         if blockCheck != initialPosition and blockCheck in emptyPlaces:
             mainSoduko[blockCheck] = mainSoduko[blockCheck] - removalValue
             if len(mainSoduko[blockCheck]) == 1:
                 removedList = removedList.union({blockCheck})
-                emptyPlaces.remove(blockCheck)
-        print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-        if len(removedList) > 0:
-            for val in removedList:
-                print(val,emptyPlaces)
+                # emptyPlaces.remove(blockCheck)
+        # print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYsYYYYYYYY")
+        # return removedList
+    if len(removedList) > 0:
+        for val in removedList:
+            if val in emptyPlaces:
+            # print(val,removedList)
+            # emptyPlaces.remove(val)
                 removeSinglePossibility(val,mainSoduko[val])
-                print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ",removedList)
+            # print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ",removedList)
         #     filledCells.append(val)
 
 
@@ -218,3 +223,4 @@ def output():
 if __name__ == "__main__":
     main()
     print(emptyPlaces)
+
